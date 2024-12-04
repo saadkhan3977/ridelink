@@ -41,8 +41,10 @@ Route::post('password/code/check', [\App\Http\Controllers\Api\CodeCheckControlle
 // Route::get('guide', [\App\Http\Controllers\Api\CMSController::class, 'guide']);
 // Route::get('term/conditions', [\App\Http\Controllers\Api\CMSController::class, 'termanscondition']);
 
-Route::get('auth/google', [GoogleController::class, 'redirectToGoogle']);
-Route::get('auth/google/callback', [GoogleController::class, 'handleGoogleCallback']);
+Route::post('/google-login', [GoogleController::class, 'login']);
+
+// Route::get('auth/google', [GoogleController::class, 'redirectToGoogle']);
+// Route::get('auth/google/callback', [GoogleController::class, 'handleGoogleCallback']);
 
 
 Route::group(['middleware' => ['api','auth:api'], 'prefix' => 'auth'], function ()

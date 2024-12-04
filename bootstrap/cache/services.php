@@ -38,11 +38,12 @@
     34 => 'Termwind\\Laravel\\TermwindServiceProvider',
     35 => 'Spatie\\LaravelIgnition\\IgnitionServiceProvider',
     36 => 'UniSharp\\LaravelFilemanager\\LaravelFilemanagerServiceProvider',
-    37 => 'Barryvdh\\DomPDF\\ServiceProvider',
-    38 => 'App\\Providers\\AppServiceProvider',
-    39 => 'App\\Providers\\AuthServiceProvider',
-    40 => 'App\\Providers\\EventServiceProvider',
-    41 => 'App\\Providers\\RouteServiceProvider',
+    37 => 'Laravel\\Socialite\\SocialiteServiceProvider',
+    38 => 'Barryvdh\\DomPDF\\ServiceProvider',
+    39 => 'App\\Providers\\AppServiceProvider',
+    40 => 'App\\Providers\\AuthServiceProvider',
+    41 => 'App\\Providers\\EventServiceProvider',
+    42 => 'App\\Providers\\RouteServiceProvider',
   ),
   'eager' => 
   array (

@@ -3,46 +3,36 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use Laravel\Socialite\Facades\Socialite;
+use Illuminate\Http\Request;
 use App\Models\User;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Str;
 
 class GoogleController extends Controller
 {
-    public function redirectToGoogle()
+    public function login(Request $request)
     {
-        return Socialite::driver('google')->stateless()->redirect();
-    }
+        $idToken = $request->input('idToken');
 
-    public function handleGoogleCallback()
-    {
-        try {
-            $googleUser = Socialite::driver('google')->stateless()->user();
+        // Verify Google ID Token
+        $client = new \Google_Client(['client_id' => env('GOOGLE_CLIENT_ID')]);
+        $payload = $client->verifyIdToken($idToken);
 
-            // Check if the user already exists
-            $user = User::where('email', $googleUser->getEmail())->first();
+        if ($payload) {
+            $googleId = $payload['sub'];
+            $email = $payload['email'];
+            $name = $payload['name'];
 
-            if (!$user) {
-                // Create a new user
-                $user = User::create([
-                    'name' => $googleUser->getName(),
-                    'email' => $googleUser->getEmail(),
-                    'google_id' => $googleUser->getId(),
-                    'password' => bcrypt(Str::random(16)), // Generate a random password
-                ]);
-            }
+            // Find or create user
+            $user = User::updateOrCreate(
+                ['google_id' => $googleId],
+                ['email' => $email, 'name' => $name]
+            );
 
-            // Generate a token
-            $token = $user->createToken('auth_token')->plainTextToken;
+            // Generate token for the user
+            $token = $user->createToken('authToken')->plainTextToken;
 
-            return response()->json([
-                'access_token' => $token,
-                'token_type' => 'Bearer',
-                'user' => $user,
-            ]);
-
-        } catch (\Exception $e) {
-            return response()->json(['error' => 'Authentication failed'], 401);
+            return response()->json(['token' => $token], 200);
+        } else {
+            return response()->json(['error' => 'Invalid Google token'], 401);
         }
     }
 }
