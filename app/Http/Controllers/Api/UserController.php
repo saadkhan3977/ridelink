@@ -160,7 +160,8 @@ class UserController extends BaseController
 
     public function profile(Request $request)
     {
-        try{
+        try
+        {
 			$olduser = User::where('id',Auth::user()->id)->first();
 			// $child = Child::where('user_id',Auth::user()->id)->first();
 			$validator = Validator::make($request->all(),[
@@ -180,7 +181,7 @@ class UserController extends BaseController
 			if($request->hasFile('photo'))
 			{
 				$file = request()->file('photo');
-				$fileName = md5($file->getClientOriginalName() . time()) . "Robert-Kramer." . $file->getClientOriginalExtension();
+				$fileName = md5($file->getClientOriginalName() . time()) . "Ride-link." . $file->getClientOriginalExtension();
 				$file->move('uploads/user/profiles/', $fileName);
 				$profile = 'uploads/user/profiles/'.$fileName;
 			}
