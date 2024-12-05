@@ -11,9 +11,13 @@ class GoogleController extends Controller
 {
     public function login(Request $request)
     {
-        $idToken = $request->input('data.idToken');
+        $validated = $request->validate([
+            'data.idToken' => 'required|string',
+        ]);
 
-        $client = new Google_Client(['client_id' => env('GOOGLE_CLIENT_ID')]); // Client ID from Google Console
+        $idToken = $validated['data']['idToken'];
+
+        $client = new \Google\Client(['client_id' => env('GOOGLE_CLIENT_ID')]); // Google Client ID
         $payload = $client->verifyIdToken($idToken);
 
         if ($payload) {
@@ -36,4 +40,5 @@ class GoogleController extends Controller
             return response()->json(['error' => 'Invalid Google token'], 401);
         }
     }
+
 }
