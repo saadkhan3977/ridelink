@@ -10,13 +10,13 @@ class GoogleController extends Controller
 {
     public function login(Request $request)
     {
-        $idToken = $request->input('idToken');
+        $idToken = $request->data['idToken'];
 
-        // Verify Google ID Token
-        $client = new \Google_Client(['client_id' => env('GOOGLE_CLIENT_ID')]);
+        $client = new Google_Client(['client_id' => env('GOOGLE_CLIENT_ID')]); // Client ID from Google Console
         $payload = $client->verifyIdToken($idToken);
 
         if ($payload) {
+            // Extract user details
             $googleId = $payload['sub'];
             $email = $payload['email'];
             $name = $payload['name'];
@@ -27,7 +27,7 @@ class GoogleController extends Controller
                 ['email' => $email, 'name' => $name]
             );
 
-            // Generate token for the user
+            // Generate token
             $token = $user->createToken('authToken')->plainTextToken;
 
             return response()->json(['token' => $token], 200);
