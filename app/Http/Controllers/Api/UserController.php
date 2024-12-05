@@ -165,9 +165,9 @@ class UserController extends BaseController
 			// $child = Child::where('user_id',Auth::user()->id)->first();
 			$validator = Validator::make($request->all(),[
 				'name' =>'string',
-				'gender' =>'string',
+				// 'gender' =>'string',
 				'phone' => 'string',
-				'dob' => 'string',
+				// 'dob' => 'string',
 				'photo' => 'image|mimes:jpeg,png,jpg,bmp,gif,svg',
 			]);
 			if($validator->fails())
@@ -186,9 +186,9 @@ class UserController extends BaseController
 			}
 			$olduser->name = $request->name;
 			//$olduser->email = $request->email;
-			$olduser->gender = $request->gender;
-			$olduser->phone = $request->holiday_mode;
-			$olduser->dob = $request->dob;
+			// $olduser->gender = $request->gender;
+			$olduser->phone = $request->phone;
+			// $olduser->dob = $request->dob;
 			$olduser->photo = $profile;
 			$olduser->save();
 
