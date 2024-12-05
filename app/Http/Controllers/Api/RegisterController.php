@@ -34,7 +34,7 @@ class RegisterController extends BaseController
     public function register(Request $request)
     {
 		$validator = Validator::make($request->all(), [
-            'device_token' => 'required',
+            // 'device_token' => 'required',
             'name' => 'required|string',
             'email' => 'required|email|unique:users',
             'phone' => 'required',
