@@ -11,6 +11,7 @@ class GoogleController extends Controller
 {
     public function login(Request $request)
     {
+        \Log::info($request->all());
         $validated = $request->validate([
             'data.idToken' => 'required|string',
         ]);
