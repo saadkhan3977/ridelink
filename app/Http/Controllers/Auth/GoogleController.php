@@ -6,6 +6,7 @@ use Laravel\Socialite\Facades\Socialite;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Google_Client;
+use App\Models\Wallet;
 
 class GoogleController extends Controller
 {
@@ -30,6 +31,10 @@ class GoogleController extends Controller
                 ['google_id' => $googleId],
                 ['email' => $email, 'name' => $name]
             );
+
+            Wallet::updateOrCreate([
+                'user_id' => $user->id,
+            ]);
 
             // Generate token
             $token = $user->createToken('authToken')->plainTextToken;
