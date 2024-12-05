@@ -11,12 +11,10 @@ class GoogleController extends Controller
 {
     public function login(Request $request)
     {
-        \Log::info($request->all());
-        $validated = $request->validate([
-            'data.idToken' => 'required|string',
-        ]);
 
-        $idToken = $validated['data']['idToken'];
+        \Log::info($request->all());
+
+        $idToken = $request->data['idToken'];;
 
         $client = new \Google\Client(['client_id' => env('GOOGLE_CLIENT_ID')]); // Google Client ID
         $payload = $client->verifyIdToken($idToken);
