@@ -10,7 +10,7 @@ class GoogleController extends Controller
 {
     public function login(Request $request)
     {
-        $idToken = $request->data->idToken;
+        $idToken = $request->input('data.idToken');
 
         $client = new Google_Client(['client_id' => env('GOOGLE_CLIENT_ID')]); // Client ID from Google Console
         $payload = $client->verifyIdToken($idToken);
