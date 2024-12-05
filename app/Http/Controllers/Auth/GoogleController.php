@@ -5,6 +5,7 @@ use App\Http\Controllers\Controller;
 use Laravel\Socialite\Facades\Socialite;
 use Illuminate\Http\Request;
 use App\Models\User;
+use Google_Client;
 
 class GoogleController extends Controller
 {
