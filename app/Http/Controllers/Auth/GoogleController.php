@@ -15,7 +15,7 @@ class GoogleController extends Controller
 
         \Log::info($request->all());
 
-        $idToken = $request->data['idToken'];;
+        $idToken = $request->idToken;
 
         $client = new \Google\Client(['client_id' => env('GOOGLE_CLIENT_ID')]); // Google Client ID
         $payload = $client->verifyIdToken($idToken);

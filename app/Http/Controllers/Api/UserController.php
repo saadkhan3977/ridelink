@@ -51,11 +51,8 @@ class UserController extends BaseController
 				$data[] = [
 					'id' => $row->id,
 					'title' => $row->data,
-					// 'description' => $row->data['description'],
-					// 'created_at' => $row->data['time'],
 					'status' => 'unread'
 				];
-				// $data[] = $row->data;
 			}
 		}
 
@@ -73,6 +70,7 @@ class UserController extends BaseController
 				];
 			}
 		}
+
 		return response()->json(['success'=>true,'unread'=> $unread,'read'=> $read,'notification' => $data]);
 	}
 
@@ -130,7 +128,6 @@ class UserController extends BaseController
 	{
 		try
 		{
-			//return Auth::user()->role;
 			$validator = Validator::make($request->all(),[
 				'ride_id' =>'required|exists:rides',
 				'rating' =>'required',
@@ -141,7 +138,6 @@ class UserController extends BaseController
 				return $this->sendError($validator->errors()->first(),500);
 			}
 
-			//return $assign_user_id;
 			$review = Review::create([
 				'ride_id' => $request->ride_id,
 				'user_id' => Auth::user()->id,
@@ -163,12 +159,9 @@ class UserController extends BaseController
         try
         {
 			$olduser = User::where('id',Auth::user()->id)->first();
-			// $child = Child::where('user_id',Auth::user()->id)->first();
 			$validator = Validator::make($request->all(),[
 				'name' =>'string',
-				// 'gender' =>'string',
 				'phone' => 'string',
-				// 'dob' => 'string',
 				'photo' => 'image|mimes:jpeg,png,jpg,bmp,gif,svg',
 			]);
 			if($validator->fails())
@@ -185,11 +178,9 @@ class UserController extends BaseController
 				$file->move('uploads/user/profiles/', $fileName);
 				$profile = 'uploads/user/profiles/'.$fileName;
 			}
+
 			$olduser->name = $request->name;
-			//$olduser->email = $request->email;
-			// $olduser->gender = $request->gender;
 			$olduser->phone = $request->phone;
-			// $olduser->dob = $request->dob;
 			$olduser->photo = $profile;
 			$olduser->save();
 
