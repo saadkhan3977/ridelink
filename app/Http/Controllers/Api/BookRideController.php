@@ -66,7 +66,8 @@ class BookRideController extends BaseController
     public function bookRide(Request $request)
     {
         $validator = \Validator::make($request->all(),[
-            'car_id'=>'required',
+            'nearest_cab'=>'required',
+            'payment_method'=>'required',
             'location_from'=>'required',
             'location_to'=>'required',
             'distance'=>'required',
