@@ -93,6 +93,8 @@ class BookRideController extends BaseController
         $ride = Ride::create([
             'user_id' => Auth::user()->id,
             // 'rider_id' => $request->car_id,
+            'payment_method' => $request->payment_method,
+            'nearest_cab' => $request->nearest_cab,
             'location_from' => $request->location_from,
             'location_to' => $request->location_to,
             'amount' => $request->amount,
@@ -104,7 +106,7 @@ class BookRideController extends BaseController
             'status' => 'pending',
         ]);
 
-        $data = Ride::with('carinfo','rider')->find($ride->id);
+        $data = Ride::find($ride->id);
         $data['user_info'] = Auth::user();
         // Send a notification to the user
         $admin = User::where('role','admin')->first(); // Admin ka user model
