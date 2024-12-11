@@ -92,7 +92,7 @@ class BookRideController extends BaseController
 
         $ride = Ride::create([
             'user_id' => Auth::user()->id,
-            'car_id' => $request->car_id,
+            // 'rider_id' => $request->car_id,
             'location_from' => $request->location_from,
             'location_to' => $request->location_to,
             'amount' => $request->amount,
