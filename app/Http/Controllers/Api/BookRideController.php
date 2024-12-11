@@ -118,7 +118,7 @@ class BookRideController extends BaseController
         // broadcast(new RideCreated($data));
         // $this->sendRideNotification($data);
 
-        return $this->sendResponse($ride ,'Ride request sent to admin.',200);
+        return $this->sendResponse($ride ,'Ride Request Successfully',200);
 
         // return response()->json([
         //     'message' => 'Ride booked successfully!',
