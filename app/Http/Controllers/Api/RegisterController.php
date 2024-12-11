@@ -66,7 +66,7 @@ class RegisterController extends BaseController
             'user_id' => $user->id,
         ]);
 
-        $token =  $user->createToken('dr-peter')->plainTextToken;
+        $token =  $user->createToken('ride-link')->plainTextToken;
         $users = $this->userinfo($request->email);
 
 		return response()->json(['success'=>true,'message'=>'User register successfully' ,'token'=>$token,'user_info'=>$users]);

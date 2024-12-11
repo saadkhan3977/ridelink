@@ -26,11 +26,11 @@ class BookRideController extends BaseController
 
     public function getbookride($id)
     {
-        $ride = Ride::withCount('ride')->with('rider','carinfo','rider.review')->find($id);
-        if ($ride && $ride->rider)
-        {
-            $ride->rider->rating = $ride->rider->review()->avg('rating'); // Assuming 'rating' is the column name in the 'review' table
-        }
+        $ride = Ride::withCount('ride')->with('rider')->find($id);
+        // if ($ride && $ride->rider)
+        // {
+        //     $ride->rider->rating = $ride->rider->review()->avg('rating'); // Assuming 'rating' is the column name in the 'review' table
+        // }
 
         return response()->json(['success'=> true, 'message' => 'Ride Info','ride_info'=>$ride]);
     }
@@ -81,14 +81,6 @@ class BookRideController extends BaseController
         if($validator->fails()) {
             return response()->json(['success'=>false,'message'=>$validator->errors()],500);
         }
-        // if($cityprice)
-        // {
-        //     $price = $cityprice->price;
-        // }
-        // else
-        // {
-        //     $price = $request->amount;
-        // }
 
         $ride = Ride::create([
             'user_id' => Auth::user()->id,
