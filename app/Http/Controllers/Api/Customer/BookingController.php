@@ -23,4 +23,21 @@ class BookingController extends BaseController
         $data = Car::where('status','active')->get();
         return $this->sendResponse($data, 'Car Lists');
     }
+
+    public function rider_ride_update(Request $request,$id)
+    {
+        $ride = Ride::find($id);
+        if($ride)
+        {
+            $ride->status = $request->status;
+            $ride->save();
+            $ridee = Ride::with('rider')->find($id);
+
+            return response()->json(['success'=> true,'message'=>'Ride Updated','ride_info'=>$ridee],200);
+        }
+        else
+        {
+            return response()->json(['success'=> false,'message'=>'No Ride Found.'],404);
+        }
+    }
 }
