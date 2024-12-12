@@ -24,7 +24,7 @@ class BookingController extends BaseController
         return $this->sendResponse($data, 'Car Lists');
     }
 
-    public function rider_ride_update(Request $request,$id)
+    public function ride_update(Request $request,$id)
     {
         $ride = Ride::find($id);
         if($ride)
