@@ -40,4 +40,21 @@ class BookingController extends BaseController
             return response()->json(['success'=> false,'message'=>'No Ride Found.'],404);
         }
     }
+
+    public function ride_update_time(Request $request,$id)
+    {
+        $ride = Ride::find($id);
+        if($ride)
+        {
+            $ride->time = $request->time;
+            $ride->save();
+            $ridee = Ride::with('rider')->find($id);
+
+            return response()->json(['success'=> true,'message'=>'Ride Updated','ride_info'=>$ridee],200);
+        }
+        else
+        {
+            return response()->json(['success'=> false,'message'=>'No Ride Found.'],404);
+        }
+    }
 }

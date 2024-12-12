@@ -101,6 +101,7 @@ Route::group(['middleware' => ['api','auth:api'], 'prefix' => 'auth'], function 
         Route::get('journey',[App\Http\Controllers\Api\Customer\BookingController::class,'journey']);
         Route::get('car_list',[App\Http\Controllers\Api\Customer\BookingController::class,'car_list']);
         Route::post('ride_update/{rideID}',[App\Http\Controllers\Api\Customer\BookingController::class,'ride_update']);
+        Route::post('ride_update_time/{rideID}',[App\Http\Controllers\Api\Customer\BookingController::class,'ride_update_time']);
 	//     Route::resource('quote',App\Http\Controllers\Api\Member\QuoteController::class);
 	//     Route::post('hiring/create',[App\Http\Controllers\Api\Member\QuoteController::class,'hiring_store']);
 	//     Route::post('search',[App\Http\Controllers\Api\Member\QuoteController::class,'search']);
