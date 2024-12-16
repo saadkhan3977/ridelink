@@ -35,7 +35,6 @@ class BookingController extends BaseController
         )
         ->where('role', $role)  // Assuming you're filtering by 'rider' role
         ->having('distance', '<', $radiusInKm)
-        ->where('role', 'rider')
         ->orderBy('distance')
         ->get();
 
