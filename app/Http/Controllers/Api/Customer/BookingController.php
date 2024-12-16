@@ -24,6 +24,7 @@ class BookingController extends BaseController
         $longitude  = Auth::user()->lng;
         $latitude  = Auth::user()->lat;
         $radiusInKm = 10;
+
         // Fetch users within the given radius
         $users = User::select(
             '*',
@@ -37,6 +38,7 @@ class BookingController extends BaseController
 
         return $this->sendResponse($users, 'Riders Lists');
     }
+
 
     public function car_list()
     {
