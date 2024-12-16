@@ -18,6 +18,25 @@ class BookingController extends BaseController
         return $this->sendResponse($data, 'My Journey Lists');
     }
 
+    public function near_riders_list()
+    {
+        $longitude  = Auth::user()->lng;
+        $latitude  = Auth::user()->lat;
+        $radiusInKm = 10;
+        // Fetch users within the given radius
+        $users = User::select(
+            '*',
+            DB::raw("(
+                6371 * acos(cos(radians(?)) * cos(radians(latitude)) * cos(radians(longitude) - radians(?)) + sin(radians(?)) * sin(radians(latitude)))
+            ) as distance", [$latitude, $longitude, $latitude])
+        )
+        ->having('distance', '<', $radiusInKm)
+        ->orderBy('distance')
+        ->get();
+
+        return $this->sendResponse($users, 'Riders Lists');
+    }
+
     public function car_list()
     {
         $data = Car::where('status','active')->get();

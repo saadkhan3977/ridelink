@@ -100,6 +100,7 @@ Route::group(['middleware' => ['api','auth:api'], 'prefix' => 'auth'], function 
         Route::post('review',[App\Http\Controllers\Api\UserController::class,'review']);
         Route::get('journey',[App\Http\Controllers\Api\Customer\BookingController::class,'journey']);
         Route::get('car_list',[App\Http\Controllers\Api\Customer\BookingController::class,'car_list']);
+        Route::get('near_riders_list',[App\Http\Controllers\Api\Customer\BookingController::class,'near_riders_list']);
         Route::post('ride_update/{rideID}',[App\Http\Controllers\Api\Customer\BookingController::class,'ride_update']);
         Route::post('ride_update_time/{rideID}',[App\Http\Controllers\Api\Customer\BookingController::class,'ride_update_time']);
 	//     Route::resource('quote',App\Http\Controllers\Api\Member\QuoteController::class);
