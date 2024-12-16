@@ -28,7 +28,7 @@ class BookingController extends BaseController
         $users = User::select(
             '*',
             \DB::raw("(
-                6371 * acos(cos(radians(?)) * cos(radians(latitude)) * cos(radians(longitude) - radians(?)) + sin(radians(?)) * sin(radians(latitude)))
+                6371 * acos(cos(radians(?)) * cos(radians(lat)) * cos(radians(lng) - radians(?)) + sin(radians(?)) * sin(radians(lat)))
             ) as distance", [$latitude, $longitude, $latitude])
         )
         ->having('distance', '<', $radiusInKm)
