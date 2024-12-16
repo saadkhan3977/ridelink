@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Ride;
 use App\Models\Car;
+use App\Models\User;
 use Auth;
 
 class BookingController extends BaseController
