@@ -33,6 +33,7 @@ class BookingController extends BaseController
             ) as distance", [$latitude, $longitude, $latitude])  // Pass 3 parameters for 3 placeholders
         )
         ->having('distance', '<', $radiusInKm)
+        ->where('role', 'rider')
         ->orderBy('distance')
         ->get();
 
