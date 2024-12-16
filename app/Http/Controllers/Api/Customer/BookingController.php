@@ -27,7 +27,7 @@ class BookingController extends BaseController
         // Fetch users within the given radius
         $users = User::select(
             '*',
-            DB::raw("(
+            \DB::raw("(
                 6371 * acos(cos(radians(?)) * cos(radians(latitude)) * cos(radians(longitude) - radians(?)) + sin(radians(?)) * sin(radians(latitude)))
             ) as distance", [$latitude, $longitude, $latitude])
         )
