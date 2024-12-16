@@ -20,26 +20,27 @@ class BookingController extends BaseController
     }
 
     public function near_riders_list()
-    {
-        $longitude  = Auth::user()->lng;
-        $latitude  = Auth::user()->lat;
-        $radiusInKm = 10;
-        $role = 'rider'; // Example: Update this according to your application's needs
+{
+    $longitude  = Auth::user()->lng;
+    $latitude  = Auth::user()->lat;
+    $radiusInKm = 10;
+    $role = 'rider'; // Example role, update as per your app's logic
 
-        // Fetch users within the given radius
-        $users = User::select(
-            '*',
-            \DB::raw("(
-                6371 * acos(cos(radians(?)) * cos(radians(lat)) * cos(radians(lng) - radians(?)) + sin(radians(?)) * sin(radians(lat)))
-            ) as distance", [$latitude, $longitude, $latitude])
-        )
-        ->where('role', $role)  // Assuming you're filtering by 'rider' role
-        ->having('distance', '<', $radiusInKm)
-        ->orderBy('distance')
-        ->get();
+    // Fetch users within the given radius
+    $users = User::select(
+        '*',
+        \DB::raw("(
+            6371 * acos(cos(radians(?)) * cos(radians(lat)) * cos(radians(lng) - radians(?)) + sin(radians(?)) * sin(radians(lat)))
+        ) as distance", [$latitude, $longitude, $latitude])  // Correct the parameters
+    )
+    ->where('role', $role)  // Make sure you're filtering by the correct role
+    ->having('distance', '<', $radiusInKm)
+    ->orderBy('distance')
+    ->get();
 
-        return $this->sendResponse($users, 'Riders Lists');
-    }
+    return $this->sendResponse($users, 'Riders Lists');
+}
+
 
 
 
