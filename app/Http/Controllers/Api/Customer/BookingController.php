@@ -30,7 +30,7 @@ class BookingController extends BaseController
             '*',
             \DB::raw("(
                 6371 * acos(cos(radians(?)) * cos(radians(lat)) * cos(radians(lng) - radians(?)) + sin(radians(?)) * sin(radians(lat)))
-            ) as distance", [$latitude, $longitude, $latitude])
+            ) as distance", [$latitude, $longitude, $latitude])  // Pass 3 parameters for 3 placeholders
         )
         ->having('distance', '<', $radiusInKm)
         ->orderBy('distance')
