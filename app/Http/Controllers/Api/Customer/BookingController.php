@@ -21,8 +21,8 @@ class BookingController extends BaseController
 
     public function near_riders_list()
 {
-    $longitude  = Auth::user()->lng;
-    $latitude  = Auth::user()->lat;
+    $longitude  = Auth::user()->lat;
+    $latitude  = Auth::user()->lng;
     $radiusInKm = 10;
     $role = 'rider'; // Example role, update as per your app's logic
 
