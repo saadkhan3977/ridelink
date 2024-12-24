@@ -87,7 +87,7 @@ class RideController extends BaseController
 
         $input = $request->except(['token'],$request->all());
 
-        $input['photo'] = '/uploads/car/image/'.$fileName;//$profile;
+        $input['image'] = '/uploads/car/image/'.$fileName;//$profile;
         $input['user_id'] = Auth::id();
         if($user)
         {
