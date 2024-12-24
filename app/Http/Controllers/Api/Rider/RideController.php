@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\BaseController as BaseController;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Ride;
+use App\Models\Car;
 use App\Models\User;
 use Auth;
 use App\Notifications\RideStatusNotification;
@@ -61,32 +62,33 @@ class RideController extends BaseController
     {
 
         $validator = Validator::make($request->all(), [
-            'car_name' => 'required|string',
-            'car_number' => 'required|string',
-            'car_seats' => 'required|string',
-            'car_category' => 'required|string',
-            'car_model' => 'required|string',
-    		'car_image' => 'image|mimes:jpeg,png,jpg,bmp,gif,svg|max:2048',
+            'name' => 'required|string',
+            'number' => 'required|string',
+            'seats' => 'required|string',
+            'category' => 'required|string',
+            'model' => 'required|string',
+            'status' => 'required|string',
+    		'image' => 'image|mimes:jpeg,png,jpg,bmp,gif,svg|max:2048',
         ]);
         if($validator->fails())
         {
 		    return $this->sendError($validator->errors()->first());
         }
 
-        $user = User::find(Auth::id());
+        $user = Car::where('user_id',Auth::id())->first();
         $fileName = null;
-        if($request->hasFile('car_image'))
+        if($request->hasFile('image'))
         {
-            $file = request()->file('car_image');
+            $file = request()->file('image');
             $fileName = md5($file->getClientOriginalName() . time()) . '.' . $file->getClientOriginalExtension();
-            $file->move('uploads/user/car_image/', $fileName);
-            $profile = asset('uploads/user/car_image/'.$fileName);
+            $file->move('uploads/car/image/', $fileName);
+            $profile = asset('uploads/car/image/'.$fileName);
         }
 
         $input = $request->except(['token'],$request->all());
 
-        $input['photo'] = '/uploads/user/car_image/'.$fileName;//$profile;
+        $input['photo'] = '/uploads/car/image/'.$fileName;//$profile;
 	    $user = $user->update($input);
-        return response()->json(['success'=> true,'message'=>'Car Update','user_info'=>$user],200);
+        return response()->json(['success'=> true,'message'=>'Car Update','car_info'=>$user],200);
     }
 }
