@@ -31,9 +31,9 @@ Route::get('user/logout',[FrontendController::class,'logout'])->name('user.logou
 Route::get('user/register',[FrontendController::class,'register'])->name('register.form');
 Route::post('user/register',[FrontendController::class,'registerSubmit'])->name('register.submit');
 
-Route::get('vendor/login',[LoginController::class,'vendor_login'])->name('vendor_login.form');
-Route::post('vendor/login',[LoginController::class,'vendor_login_submit'])->name('vendor.login');
-Route::post('vendor/register',[FrontendController::class,'vendorregisterSubmit'])->name('vendor_register.submit');
+Route::get('rider/login',[LoginController::class,'rider_login'])->name('rider_login.form');
+Route::post('rider/login',[LoginController::class,'rider_login_submit'])->name('rider.login');
+Route::post('rider/register',[FrontendController::class,'riderregisterSubmit'])->name('rider_register.submit');
 // Reset password
 // Route::post('password-reset', [FrontendController::class,'showResetForm'])->name('password.reset');
 // Socialite
@@ -116,9 +116,15 @@ Route::get('/',[FrontendController::class,'home'])->name('home');
 
 
 // Backend section start
+Route::group(['middleware' => ['auth','rider'], 'prefix' => 'rider'], function (){
+    Route::get('/dashboard',[\App\Http\Controllers\Rider\DashboardController::class,'index'])->name('rider.dashboard');
+    Route::resource('/rider-car',\App\Http\Controllers\Rider\CarController::class);
+    Route::get('/profile',[\App\Http\Controllers\AdminController::class,'profile'])->name('rider.profile');
+});
 
 Route::group(['prefix'=>'admin','middleware'=>['auth','admin']],function(){
     Route::get('/dashboard',[\App\Http\Controllers\AdminController::class,'index'])->name('admin.dashboard');
+
 
 
     // user route

@@ -14,15 +14,15 @@ class AdminUserSeeder extends Seeder
      */
     public function run()
     {
-        User::create([
-            'first_name' => 'Pay Me First',
-            'last_name' => 'Admin',
-            'email' => 'admin@gmail.com',
-            'password' => bcrypt('admin'),
-            'role' => 'admin',
-            'created_at'=>\Carbon\Carbon::now(),
-            'updated_at'=>\Carbon\Carbon::now(),
+        // User::create([
+        //     'first_name' => 'Admin',
+        //     'last_name' => 'Admin',
+        //     'email' => 'admin@gmail.com',
+        //     'password' => bcrypt('12345678'),
+        //     'role' => 'admin',
+        //     'created_at'=>\Carbon\Carbon::now(),
+        //     'updated_at'=>\Carbon\Carbon::now(),
 
-        ]);
+        // ]);
     }
 }

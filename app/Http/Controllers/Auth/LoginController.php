@@ -51,15 +51,15 @@ class LoginController extends Controller
      return Socialite::driver($provider)->redirect();
     }
 
-    public function vendor_login(Request $request)
+    public function rider_login(Request $request)
     {
         if (Auth::check()) {
             return redirect()->route('dashboard');
         }
-            return view('auth.vendor_login');
+            return view('auth.rider_login');
     }
 
-    public function vendor_login_submit(Request $request)
+    public function rider_login_submit(Request $request)
     {
         try{
             $data= $request->all();
@@ -67,19 +67,19 @@ class LoginController extends Controller
                 'email' => 'required|string|email|exists:users',
                 'password' => 'required|string',
             ]);
-            if ($validator->fails()) 
+            if ($validator->fails())
             {
                 return redirect()->back()->with('error',$validator->errors()->first());
             }
             // $user = User::where('email',$request->email)->first();
-        
+
             if(Auth::attempt(['email' => $data['email'], 'password' => $data['password'],'status'=>'active'])
             ){
                 \Session::put('user',$data['email']);
                 request()->session()->flash('success','Successfully login');
-                return redirect()->route('home')->with('success','Successfully login');
+                return redirect()->route('rider.dashboard')->with('success','Successfully login');
             }
-            
+
             else
             {
                 return redirect()->back()->with('error','Invalid Password pleas try again!');
@@ -90,7 +90,7 @@ class LoginController extends Controller
             return redirect()->back()->with('error',$e->getMessage());
         }
     }
- 
+
     public function Callback($provider)
     {
         $userSocial =   Socialite::driver($provider)->stateless()->user();

@@ -4,7 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 
-class Admin
+class Rider
 {
     /**
      * Handle an incoming request.
@@ -20,9 +20,9 @@ class Admin
             return $next($request);
         }
         else{
-            echo $request->user()->role;die;
+            // echo $request->user()->role;die;
             request()->session()->flash('error','You do not have any permission to access this pages');
-            return redirect()->route();
+            return redirect()->back();
         }
     }
 }
