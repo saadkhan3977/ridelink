@@ -76,6 +76,8 @@ class RideController extends BaseController
         }
 
         $user = Car::where('user_id',Auth::id())->first();
+        $input = $request->except(['token'],$request->all());
+
         $fileName = null;
         if($request->hasFile('image'))
         {
@@ -83,11 +85,9 @@ class RideController extends BaseController
             $fileName = md5($file->getClientOriginalName() . time()) . '.' . $file->getClientOriginalExtension();
             $file->move('uploads/car/image/', $fileName);
             $profile = asset('uploads/car/image/'.$fileName);
+            $input['image'] = '/uploads/car/image/'.$fileName;//$profile;
         }
 
-        $input = $request->except(['token'],$request->all());
-
-        $input['image'] = '/uploads/car/image/'.$fileName;//$profile;
         $input['user_id'] = Auth::id();
         if($user)
         {
