@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\Rider;
 
+use App\Http\Controllers\Api\BaseController as BaseController;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Ride;
@@ -11,7 +12,7 @@ use App\Notifications\RideStatusNotification;
 use App\Services\FirebaseService;
 use Validator;
 
-class RideController extends Controller
+class RideController extends BaseController
 {
 
     protected $firebaseService;
