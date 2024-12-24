@@ -9,6 +9,7 @@ use App\Models\User;
 use Auth;
 use App\Notifications\RideStatusNotification;
 use App\Services\FirebaseService;
+use Validator;
 
 class RideController extends Controller
 {
