@@ -89,7 +89,14 @@ class RideController extends BaseController
 
         $input['photo'] = '/uploads/car/image/'.$fileName;//$profile;
         $input['user_id'] = Auth::id();
-	    $user = $user->update($input);
+        if($user)
+        {
+            $user = $user->update($input);
+        }
+        else
+        {
+            $user = Car::create($input);
+        }
         return response()->json(['success'=> true,'message'=>'Car Update','car_info'=>$user],200);
     }
 }
