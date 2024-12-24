@@ -65,8 +65,8 @@ class RideController extends BaseController
             'car_number' => 'required|string',
             'car_seats' => 'required|string',
             'car_category' => 'required|string',
-            'car_image' => 'required|string',
-    		'car_model' => 'image|mimes:jpeg,png,jpg,bmp,gif,svg|max:2048',
+            'car_model' => 'required|string',
+    		'car_image' => 'image|mimes:jpeg,png,jpg,bmp,gif,svg|max:2048',
         ]);
         if($validator->fails())
         {
