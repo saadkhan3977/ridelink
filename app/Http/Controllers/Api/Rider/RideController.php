@@ -83,7 +83,7 @@ class RideController extends BaseController
         $user->lat = $request->lat;
         $user->lng = $request->lng;
         $user->save();
-        return response()->json(['success'=> true,'message'=>'Location Updated'],200);
+        return response()->json(['success'=> true,'message'=>'Location Updated','user_info'=>$user],200);
     }
 
     public function car_update(Request $request)
