@@ -25,7 +25,25 @@ class RideController extends BaseController
 
     public function index()
     {
-        $ride = Ride::with('carinfo','user')->where('status','in process')->where('rider_id',Auth::user()->id)->first();
+        $longitude = Auth::user()->lng; // Current user's longitude
+        $latitude = Auth::user()->lat;  // Current user's latitude
+        $radiusInKm = 10;
+
+        $ride = Ride::with('user')->select(
+            '*',
+            \DB::raw("(
+                6371 * acos(
+                    cos(radians(?))
+                    * cos(radians(lat))
+                    * cos(radians(lng) - radians(?))
+                    + sin(radians(?))
+                    * sin(radians(lat))
+                )
+            ) as distance")
+        )
+        ->setBindings([$latitude, $longitude, $latitude]) // Bind values for the placeholders
+        ->having('distance', '<', $radiusInKm)            // Filter by distance
+        ->orderBy('distance')->where('status','in process')->get();
         return response()->json(['success'=> true,'message'=>'Ride Info','ride_info'=>$ride],200);
     }
 
