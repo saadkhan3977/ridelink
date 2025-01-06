@@ -34,10 +34,10 @@ class RideController extends BaseController
             \DB::raw("(
                 6371 * acos(
                     cos(radians(?))
-                    * cos(radians(lat))
-                    * cos(radians(lng) - radians(?))
+                    * cos(radians(pickup_location_lat))
+                    * cos(radians(pickup_location_lng) - radians(?))
                     + sin(radians(?))
-                    * sin(radians(lat))
+                    * sin(radians(pickup_location_lat))
                 )
             ) as distance")
         )
