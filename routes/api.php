@@ -94,6 +94,7 @@ Route::group(['middleware' => ['api','auth:api'], 'prefix' => 'auth'], function 
     Route::group(['prefix' => 'rider'], function () {
         Route::get('ride-request-list',[App\Http\Controllers\Api\Rider\RideController::class,'index']);
         Route::post('ride_update/{rideID}',[App\Http\Controllers\Api\Rider\RideController::class,'rider_ride_update']);
+        Route::post('update-location',[App\Http\Controllers\Api\Rider\RideController::class,'update_location']);
         Route::post('car_update',[App\Http\Controllers\Api\Rider\RideController::class,'car_update']);
     });
 
