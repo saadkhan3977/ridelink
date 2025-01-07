@@ -21,6 +21,7 @@ return new class extends Migration
             $table->integer('seats')->nullable();
             $table->integer('price')->nullable();
             $table->string('image')->nullable();
+            $table->string('type')->nullable();
             $table->string('status')->default('pending');
             $table->timestamps();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
