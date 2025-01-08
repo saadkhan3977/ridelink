@@ -20,33 +20,33 @@ class BookingController extends BaseController
     }
 
     public function near_riders_list()
-{
-    $longitude = Auth::user()->lng; // Current user's longitude
-    $latitude = Auth::user()->lat;  // Current user's latitude
-    $radiusInKm = 10;               // Radius to search (in kilometers)
-    $role = 'rider';                // Role filter
+    {
+        $longitude = Auth::user()->lng; // Current user's longitude
+        $latitude = Auth::user()->lat;  // Current user's latitude
+        $radiusInKm = 10;               // Radius to search (in kilometers)
+        $role = 'rider';                // Role filter
 
-    // Fetch users within the given radius
-    $users = User::select(
-        '*',
-        \DB::raw("(
-            6371 * acos(
-                cos(radians(?))
-                * cos(radians(lat))
-                * cos(radians(lng) - radians(?))
-                + sin(radians(?))
-                * sin(radians(lat))
-            )
-        ) as distance")
-    )
-    ->setBindings([$latitude, $longitude, $latitude]) // Bind values for the placeholders
-    ->where('role', $role)                            // Filter users by role
-    ->having('distance', '<', $radiusInKm)            // Filter by distance
-    ->orderBy('distance')                             // Order by nearest distance
-    ->get();
+        // Fetch users within the given radius
+        $users = User::select(
+            '*',
+            \DB::raw("(
+                6371 * acos(
+                    cos(radians(?))
+                    * cos(radians(lat))
+                    * cos(radians(lng) - radians(?))
+                    + sin(radians(?))
+                    * sin(radians(lat))
+                )
+            ) as distance")
+        )
+        ->setBindings([$latitude, $longitude, $latitude]) // Bind values for the placeholders
+        ->where('role', $role)                            // Filter users by role
+        ->having('distance', '<', $radiusInKm)            // Filter by distance
+        ->orderBy('distance')                             // Order by nearest distance
+        ->get();
 
-    return $this->sendResponse($users, 'Riders List');
-}
+        return $this->sendResponse($users, 'Riders List');
+    }
 
 
 
@@ -54,6 +54,14 @@ class BookingController extends BaseController
     {
         $data = Car::where('status','active')->get();
         return $this->sendResponse($data, 'Car Lists');
+    }
+
+    public function ride_list(Request $request)
+    {
+        $today = Carbon::today();
+
+        $data = Ride::whereBetween('created_at', [now()->startOfDay(), now()->endOfDay()])->where('user_id',Auth::id())->get();
+        return $this->sendResponse($data, 'Ride Lists');
     }
 
     public function ride_update(Request $request,$id)

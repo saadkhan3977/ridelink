@@ -61,17 +61,13 @@ class RideController extends BaseController
                 }
                 else
                 {
-                    RideRequest::create([
-                        'ride_id' => $id,
-                        'rider_id' => Auth::id(),
-                    ]);
+                    RideRequest::create(['ride_id' => $id,'rider_id' => Auth::id()]);
                     return response()->json(['success'=> true,'message'=>'Ride Requested Successfull'],200);
                 }
             }
             if($request->statu == 'accept')
             {
                 $riderequest = RideRequest::where('ride_id',$id)->where('rider_id',Auth::id())->first();
-
                 $ride->status = $request->status;
                 $ride->save();
             }
