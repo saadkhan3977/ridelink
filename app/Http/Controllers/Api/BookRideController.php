@@ -98,6 +98,16 @@ class BookRideController extends BaseController
             'status' => 'pending',
         ]);
 
+        if($request->pickup)
+        foreach($request->pickup as $pickup)
+        {
+            RidePickup::create([
+                'ride_id' => $ride->id,
+                'pickup_lat' => $pickup->pickup_lat,
+                'pickup_lng' => $pickup->pickup_lng,
+            ]);
+        }
+
         $data = Ride::find($ride->id);
         $data['user_info'] = Auth::user();
         // Send a notification to the user
