@@ -62,11 +62,11 @@ class BookingController extends BaseController
         $today = Carbon::today();
         if($request->type == 'current')
         {
-            $data = Ride::whereBetween('created_at', [now()->startOfDay(), now()->endOfDay()])->where('user_id',Auth::id())->get();
+            $data = Ride::whereBetween('created_at', [now()->startOfDay(), now()->endOfDay()])->where('status','complete')->where('user_id',Auth::id())->get();
         }
         else
         {
-            $data = Ride::whereBetween('created_at', [now()->startOfDay(), now()->endOfDay()])->where('user_id',Auth::id())->get();
+            $data = Ride::whereBetween('created_at', [now()->startOfDay(), now()->endOfDay()])->where('status','complete')->where('user_id',Auth::id())->get();
         }
         return $this->sendResponse($data, 'Ride Lists');
     }
