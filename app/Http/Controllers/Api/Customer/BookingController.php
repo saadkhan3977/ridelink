@@ -57,12 +57,18 @@ class BookingController extends BaseController
         return $this->sendResponse($data, 'Car Lists');
     }
 
+    public function wallet()
+    {
+        $data = Car::where('status','active')->get();
+        return $this->sendResponse($data, 'Car Lists');
+    }
+
     public function ride_list(Request $request)
     {
         $today = Carbon::today();
         if($request->type == 'current')
         {
-            $data = Ride::whereBetween('created_at', [now()->startOfDay(), now()->endOfDay()])->where('status','complete')->where('user_id',Auth::id())->get();
+            $data = Ride::whereBetween('created_at', [now()->startOfDay(), now()->endOfDay()])->where('status','pending')->where('user_id',Auth::id())->get();
         }
         else
         {
