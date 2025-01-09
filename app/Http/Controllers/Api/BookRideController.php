@@ -11,6 +11,7 @@ use App\Models\User;
 use App\Events\RideCreated;
 use App\Events\CityPrice;
 use Pusher\Pusher;
+use App\Events\RideEvent;
 use Auth;
 use App\Services\FirebaseService;
 
@@ -108,24 +109,59 @@ class BookRideController extends BaseController
             ]);
         }
 
+
+
+
+
+        $radiusInKm = 10;
+
+        $users = User::select(
+            '*',
+            \DB::raw("(
+                6371 * acos(
+                    cos(radians(?))
+                    * cos(radians(lat))
+                    * cos(radians(lng) - radians(?))
+                    + sin(radians(?))
+                    * sin(radians(lat))
+                )
+            ) as distance")
+        )
+        ->setBindings([$latitude, $longitude, $latitude]) // Bind values for the placeholders
+        ->having('distance', '<', $radiusInKm)            // Filter by distance
+        ->orderBy('distance')
+        ->where('role','rider')
+        ->where('ride_status','available')
+        ->get();
+
+        if($users)
+        {
+            foreach($users as $user)
+            {
+                $body = $user->first_name . ' ' . $user->last_name .' New Ride';
+                $title = request()->text;
+                $fcmToken = $user->device_token;
+                $response = $this->firebaseService->sendNotification($fcmToken, $title, $body);
+
+                $message = [
+                    'ride_id' => $ride->id,
+                    'rider_id' => $request->rider_id,
+                    'user_id' => $user->id,
+                    'text' => 'New Ride',
+                    'createdAt' => $ride->updated_at,
+                    'ride_info' => $ride,
+                ];
+
+                // Broadcast the event
+                \Log::info('Broadcasting RideCreated event to rider-channel-2');
+
+                broadcast(new RideEvent((object)$message))->toOthers();
+            }
+        }
+
         $data = Ride::find($ride->id);
         $data['user_info'] = Auth::user();
-        // Send a notification to the user
-        // $admin = User::where('role','admin')->first(); // Admin ka user model
-
-        // $ride['title'] = 'New Ride Request';
-        // $ride['body'] = $admin->first_name . ' ' . $admin->last_name .' New Ride Request.';
-
-        // $admin->notify(new RideStatusNotification($data));
-        // broadcast(new RideCreated($data));
-        // $this->sendRideNotification($data);
-
         return $this->sendResponse($ride ,'Ride Request Successfully',200);
-
-        // return response()->json([
-        //     'message' => 'Ride booked successfully!',
-        //     'ride' => $ride
-        // ], 201);
     }
 
     protected function sendRideNotification(Ride $ride)

@@ -16,8 +16,10 @@ return new class extends Migration
         Schema::create('ride_pickups', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('ride_id');
-            $table->string('pick')->nullable();
-            $table->string('drop')->nullable();
+            $table->string('pickup_lat')->nullable();
+			$table->string('pickup_lng')->nullable();
+            $table->string('drop_lat')->nullable();
+			$table->string('drop_lng')->nullable();
             $table->timestamps();
             $table->foreign('ride_id')->references('id')->on('rides')->onDelete('cascade');
         });
