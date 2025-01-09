@@ -144,7 +144,7 @@ class BookRideController extends BaseController
                 $body = $user->first_name . ' ' . $user->last_name .' New Ride';
                 $title = request()->text;
                 $fcmToken = $user->device_token;
-                $response = $this->firebaseService->sendNotification($fcmToken, $title, $body);
+               return $response = $this->firebaseService->sendNotification($fcmToken, $title, $body);
 
                 $message = [
                     'ride_id' => $ride->id,
