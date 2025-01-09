@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Notifications\RideStatusNotification;
 use App\Models\Ride;
 use App\Models\User;
+use App\Events\RideEvent;
 use App\Events\RideCreated;
 use App\Events\CityPrice;
 use Pusher\Pusher;
