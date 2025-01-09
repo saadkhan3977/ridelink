@@ -67,7 +67,7 @@ class BookRideController extends BaseController
     public function bookRide(Request $request)
     {
         $validator = \Validator::make($request->all(),[
-            'nearest_cab'=>'required',
+            // 'nearest_cab'=>'required',
             'payment_method'=>'required',
             'location_from'=>'required',
             'location_to'=>'required',
@@ -113,7 +113,25 @@ class BookRideController extends BaseController
 
 
 
+        $longitude = Auth::user()->lng; // Current user's longitude
+        $latitude = Auth::user()->lat;  // Current user's latitude
         $radiusInKm = 10;
+
+        $ride = Ride::with('user')->select(
+            '*',
+            \DB::raw("(
+                6371 * acos(
+                    cos(radians(?))
+                    * cos(radians(pickup_location_lat))
+                    * cos(radians(pickup_location_lng) - radians(?))
+                    + sin(radians(?))
+                    * sin(radians(pickup_location_lat))
+                )
+            ) as distance")
+        )
+        ->setBindings([$latitude, $longitude, $latitude]) // Bind values for the placeholders
+        ->having('distance', '<', $radiusInKm)            // Filter by distance
+        ->orderBy('distance')->where('status','in process')->get();
 
         $users = User::select(
             '*',
