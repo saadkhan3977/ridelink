@@ -11,7 +11,6 @@ use App\Models\User;
 use App\Events\RideCreated;
 use App\Events\CityPrice;
 use Pusher\Pusher;
-use App\Events\RideEvent;
 use Auth;
 use App\Services\FirebaseService;
 
@@ -67,7 +66,7 @@ class BookRideController extends BaseController
     public function bookRide(Request $request)
     {
         $validator = \Validator::make($request->all(),[
-            // 'nearest_cab'=>'required',
+            'nearest_cab'=>'required',
             'payment_method'=>'required',
             'location_from'=>'required',
             'location_to'=>'required',
@@ -112,26 +111,9 @@ class BookRideController extends BaseController
 
 
 
-
         $longitude = Auth::user()->lng; // Current user's longitude
         $latitude = Auth::user()->lat;  // Current user's latitude
         $radiusInKm = 10;
-
-        $ride = Ride::with('user')->select(
-            '*',
-            \DB::raw("(
-                6371 * acos(
-                    cos(radians(?))
-                    * cos(radians(pickup_location_lat))
-                    * cos(radians(pickup_location_lng) - radians(?))
-                    + sin(radians(?))
-                    * sin(radians(pickup_location_lat))
-                )
-            ) as distance")
-        )
-        ->setBindings([$latitude, $longitude, $latitude]) // Bind values for the placeholders
-        ->having('distance', '<', $radiusInKm)            // Filter by distance
-        ->orderBy('distance')->where('status','in process')->get();
 
         $users = User::select(
             '*',
@@ -151,6 +133,8 @@ class BookRideController extends BaseController
         ->where('role','rider')
         ->where('ride_status','available')
         ->get();
+
+
 
         if($users)
         {
@@ -177,9 +161,25 @@ class BookRideController extends BaseController
             }
         }
 
+
         $data = Ride::find($ride->id);
         $data['user_info'] = Auth::user();
+        // Send a notification to the user
+        // $admin = User::where('role','admin')->first(); // Admin ka user model
+
+        // $ride['title'] = 'New Ride Request';
+        // $ride['body'] = $admin->first_name . ' ' . $admin->last_name .' New Ride Request.';
+
+        // $admin->notify(new RideStatusNotification($data));
+        // broadcast(new RideCreated($data));
+        // $this->sendRideNotification($data);
+
         return $this->sendResponse($ride ,'Ride Request Successfully',200);
+
+        // return response()->json([
+        //     'message' => 'Ride booked successfully!',
+        //     'ride' => $ride
+        // ], 201);
     }
 
     protected function sendRideNotification(Ride $ride)
