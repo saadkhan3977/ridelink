@@ -24,6 +24,7 @@ return new class extends Migration
             $table->string('photo')->nullable();
             $table->integer('agree_terms_condition')->default(0);
             $table->text('device_token')->nullable();
+            $table->enum('ride_status',['available','non-available'])->default('non-available');
             $table->enum('role',['rider','admin','customer'])->default('customer');
             $table->enum('status',['active','inactive'])->default('active');
             $table->rememberToken();
