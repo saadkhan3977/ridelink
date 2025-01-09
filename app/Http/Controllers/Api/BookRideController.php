@@ -116,25 +116,22 @@ class BookRideController extends BaseController
         $latitude = Auth::user()->lat;  // Current user's latitude
         $radiusInKm = 10;
 
-        // $users = User::select(
-        //     '*',
-        //     \DB::raw("(
-        //         6371 * acos(
-        //             cos(radians(?))
-        //             * cos(radians(lat))
-        //             * cos(radians(lng) - radians(?))
-        //             + sin(radians(?))
-        //             * sin(radians(lat))
-        //         )
-        //     ) as distance")
-        // )
-        // ->setBindings([$latitude, $longitude, $latitude]) // Bind values for the placeholders
-        // ->having('distance', '<', $radiusInKm)            // Filter by distance
-        // ->orderBy('distance')
-        // ->where('role','rider')
-        // ->where('ride_status','available')
-        // ->get();
-        $users = User::where('role','rider')
+        $users = User::select(
+            '*',
+            \DB::raw("(
+                6371 * acos(
+                    cos(radians(?))
+                    * cos(radians(lat))
+                    * cos(radians(lng) - radians(?))
+                    + sin(radians(?))
+                    * sin(radians(lat))
+                )
+            ) as distance")
+        )
+        ->setBindings([$latitude, $longitude, $latitude]) // Bind values for the placeholders
+        ->having('distance', '<', $radiusInKm)            // Filter by distance
+        ->orderBy('distance')
+        ->where('role','rider')
         ->where('ride_status','available')
         ->get();
 
