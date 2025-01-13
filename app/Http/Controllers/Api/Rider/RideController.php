@@ -47,6 +47,20 @@ class RideController extends BaseController
         return response()->json(['success'=> true,'message'=>'Ride Info','ride_info'=>$ride],200);
     }
 
+    public function ride_list(Request $request)
+    {
+        // $today = Carbon::today();
+        // if($request->type == 'current')
+        // {
+        //     $data = Ride::whereBetween('created_at', [now()->startOfDay(), now()->endOfDay()])->where('status','pending')->where('user_id',Auth::id())->get();
+        // }
+        // else
+        // {
+            $data = Ride::where('status','complete')->where('rider_id',Auth::id())->get();
+        // }
+        return $this->sendResponse($data, 'Ride Lists');
+    }
+
     public function rider_ride_update(Request $request,$id)
     {
         $ride = Ride::find($id);
