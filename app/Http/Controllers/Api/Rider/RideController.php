@@ -43,7 +43,7 @@ class RideController extends BaseController
         )
         ->setBindings([$latitude, $longitude, $latitude]) // Bind values for the placeholders
         ->having('distance', '<', $radiusInKm)            // Filter by distance
-        ->orderBy('distance')->where('status','in process')->get();
+        ->orderBy('distance')->where('status','pending')->get();
         return response()->json(['success'=> true,'message'=>'Ride Info','ride_info'=>$ride],200);
     }
 
