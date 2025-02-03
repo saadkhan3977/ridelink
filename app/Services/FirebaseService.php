@@ -5,6 +5,7 @@ namespace App\Services;
 
 use Google\Client as GoogleClient;
 use GuzzleHttp\Client as GuzzleClient;
+use Kreait\Laravel\Firebase\Facades\Firebase;
 
 class FirebaseService
 {
@@ -20,7 +21,7 @@ class FirebaseService
     public function sendNotification($fcmToken, $title, $body)
     {
         // Get the OAuth 2.0 token
-        $url = 'https://fcm.googleapis.com/v1/projects/robert-kramer-41dd3/messages:send'; // Replace with your project ID
+        $url = 'https://fcm.googleapis.com/v1/projects/ridelink-be22c/messages:send'; // Replace with your project ID
         $accessToken = $this->getAccessToken();
 
         // Sending the request with the Guzzle HTTP Client
@@ -50,5 +51,17 @@ class FirebaseService
         $client->addScope('https://www.googleapis.com/auth/cloud-platform');
         $token = $client->fetchAccessTokenWithAssertion();
         return $token['access_token'];
+    }
+	
+	public function setData($path, $data)
+    {
+		$database = Firebase::database();
+        $database->getReference($path)->set($data);
+    }
+
+    public function updateData($path, $data)
+    {
+		$database = Firebase::database();
+        $database->getReference($path)->update($data);
     }
 }

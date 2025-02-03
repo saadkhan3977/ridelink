@@ -6,12 +6,15 @@ use App\Http\Controllers\Api\BaseController as BaseController;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Ride;
+use App\Models\RideRequest;
 use App\Models\Car;
 use App\Models\User;
 use Auth;
 use App\Notifications\RideStatusNotification;
 use App\Services\FirebaseService;
 use Validator;
+use Kreait\Laravel\Firebase\Facades\Firebase;
+use Kreait\Firebase\Database;
 
 class RideController extends BaseController
 {
@@ -66,7 +69,7 @@ class RideController extends BaseController
         $ride = Ride::find($id);
         if($ride)
         {
-            if($request->statu == 'request')
+            if($request->status == 'request')
             {
                 $riderequest = RideRequest::where('ride_id',$id)->where('rider_id',Auth::id())->first();
                 if(!$riderequest)
@@ -79,10 +82,11 @@ class RideController extends BaseController
                     return response()->json(['success'=> true,'message'=>'Ride Requested Successfull'],200);
                 }
             }
-            if($request->statu == 'accept')
+            if($request->status == 'accept')
             {
                 $riderequest = RideRequest::where('ride_id',$id)->where('rider_id',Auth::id())->first();
                 $ride->status = $request->status;
+				$ride->rider_id = Auth::id();
                 $ride->save();
             }
 
@@ -98,8 +102,17 @@ class RideController extends BaseController
             // $fcmToken = $customer->device_token;
             // $response = $this->firebaseService->sendNotification($fcmToken, $title, $body);
             $ridee = Ride::with('rider')->find($id);
+			//return  $database = Firebase::database();
+			$path = "requests/$id/ride_info";
 
-            return response()->json(['success'=> true,'message'=>'Ride Accepted','ride_info'=>$ridee],200);
+			// Prepare the data to update
+			$data = [
+				'status' => ($request->status == 'cancel') ? 'pending' : $request->status, // Update ride status
+				'rider' => $ridee->rider,
+				
+			];
+			$this->firebaseService->updateData($path, $data);
+            return response()->json(['success'=> true,'message'=>'Ride '.$request->status,'ride_info'=>$ridee],200);
         }
         else
         {
@@ -124,7 +137,7 @@ class RideController extends BaseController
             'name' => 'required|string',
             'number' => 'required|string',
             'seats' => 'required|string',
-            'type' => 'required|string',
+            // 'type' => 'required|string',
             'category' => 'required|string',
             'model' => 'required|string',
             'status' => 'required|string',
@@ -132,7 +145,7 @@ class RideController extends BaseController
         ]);
         if($validator->fails())
         {
-		    return $this->sendError($validator->errors()->first());
+		    return $this->sendError($validator->errors()->first(),500);
         }
 
         $user = Car::where('user_id',Auth::id())->first();
