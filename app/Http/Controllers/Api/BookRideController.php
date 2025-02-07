@@ -148,7 +148,7 @@ class BookRideController extends BaseController
 
         $longitude = Auth::user()->lng; // Current user's longitude
         $latitude = Auth::user()->lat;  // Current user's latitude
-        $radiusInKm = 10;
+        $radiusInKm = 2;
 
         $users = User::select(
              '*',
