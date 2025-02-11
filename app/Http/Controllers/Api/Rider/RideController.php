@@ -87,6 +87,7 @@ class RideController extends BaseController
                 $riderequest = RideRequest::where('ride_id',$id)->where('rider_id',Auth::id())->first();
                 $ride->status = $request->status;
 				$ride->rider_id = Auth::id();
+				$ride->rider_arrived_time = $request->rider_arrived_time;
                 $ride->save();
             }
 
@@ -109,6 +110,7 @@ class RideController extends BaseController
 			$data = [
 				'status' => ($request->status == 'cancel') ? 'pending' : $request->status, // Update ride status
 				'rider' => $ridee->rider,
+                'rider_arrived_time' => $request->rider_arrived_time,
 				
 			];
 			$this->firebaseService->updateData($path, $data);
@@ -132,12 +134,10 @@ class RideController extends BaseController
 
     public function car_update(Request $request)
     {
-
         $validator = Validator::make($request->all(), [
             'name' => 'required|string',
             'number' => 'required|string',
             'seats' => 'required|string',
-            // 'type' => 'required|string',
             'category' => 'required|string',
             'model' => 'required|string',
             'status' => 'required|string',

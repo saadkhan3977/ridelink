@@ -123,6 +123,7 @@ class BookRideController extends BaseController
 				'pickup_location_lat' => $ride->pickup_location_lat,
 				'pickup_location_lng' => $ride->pickup_location_lng,
 				'status' => $ride->status,
+				'rider_arrived_time' => 'null', 
 				'rider' => 'null', 
 				'user' => $ride->user, 
 				]

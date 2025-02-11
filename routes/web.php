@@ -101,7 +101,7 @@ Route::get('/',[FrontendController::class,'home'])->name('home');
 // // Product Review
 // Route::resource('/review',\App\Http\Controllers\ProductReviewController::class);
 // // Route::post('product/{slug}/review',[\App\Http\Controllers\ProductReviewController::class,'store'])->name('review.store');
-// Route::post('vendor/{slug}/review',[\App\Http\Controllers\ProductReviewController::class,'vendor_store'])->name('vendor_review.store');
+Route::post('vendor/{slug}/review',[\App\Http\Controllers\ProductReviewController::class,'vendor_store'])->name('vendor_review.store');
 
 // // Post Comment
 // Route::post('post/{slug}/comment',[\App\Http\Controllers\PostCommentController::class,'store'])->name('post-comment.store');

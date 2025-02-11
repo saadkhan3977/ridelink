@@ -14,6 +14,7 @@ return new class extends Migration
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('rider_id')->nullable();
             $table->string('nearest_cab')->nullable();
+            $table->string('rider_arrived_time')->nullable();
             $table->string('payment_method');
             $table->string('location_from');
             $table->string('location_to');
